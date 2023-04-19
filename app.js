@@ -14,15 +14,15 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 app.set('view engine', 'ejs');
+// app.listen(3000, () => {});
 
-app.listen(8080, () => {});
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
+app.use('/test', indexRouter);
 app.use('/users', usersRouter);
 app.use('/account', accountRouter);
 
