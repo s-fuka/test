@@ -4,7 +4,6 @@ var connection = require('../connection');
 
 // /* GET home page. */
 router.get('/get', function(req, res, next) {
-  console.log('aaa');
   connection.connect();
   console.log(connection)
   connection.query(
