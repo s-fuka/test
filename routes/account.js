@@ -66,7 +66,6 @@ async function insertAccount(body, password) {
       + 'values(?, ?, ?, ?, ?)';
 
     connection.query(insertSql, insertData,(err, result) => {
-      console.log(err)
     return err ? reject(err) : resolve(result);
     });
 });
