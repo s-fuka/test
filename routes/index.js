@@ -3,7 +3,7 @@ var router = express.Router();
 var connection = require('../connection');
 
 // /* GET home page. */
-router.get('/get', function(req, res, next) {
+router.get('/', function(req, res, next) {
   connection.connect();
   console.log(connection)
   connection.query(
