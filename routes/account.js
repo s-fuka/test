@@ -37,6 +37,36 @@ router.post('/create_account', (req, res, next) =>{
 });
 
 /**
+ * ログイン
+ */
+router.post('/login', function(req, res, next) {
+  try {
+    const email = req.body.email;
+    const password = req.body.password;
+    console.log(req.body);
+
+    connection.connect();
+    connection.query(
+      'SELECT * FROM tb_user '
+      + 'WHERE email = \'' + email + '\''
+      + 'AND password = \'' + password + '\'',
+      (error, results) => {
+        if (error) {
+          throw error;
+        };
+        console.log(results);
+        res.json(results[0])
+        // res.render('top', results[0]);
+      }
+    );
+    connection.end();
+  } catch (err) {
+    console.log(err);
+    return;
+  }
+});
+
+/**
  * Eメールの重複チェック(新規)
  */
 async function getInsertEmailCheck(body){
