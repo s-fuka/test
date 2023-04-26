@@ -6,33 +6,34 @@ const ApiException = require('./common/Exception');
 const define = require('./common/define');
 var connection = require('../connection');
 
+const IS_DELETED_FAULSE = 0;
 
 /**
  * アカウント登録
  */
 router.post('/create_account', (req, res, next) =>{
   ;(async () => {
-      try {
-      //Emailチェック
-      var emailCheck = await getInsertEmailCheck(req.body);
+    try {
+    //Emailチェック
+    var emailCheck = await getInsertEmailCheck(req.body);
 
-      if (emailCheck.length !== 0 ) {
-          return new ApiException(res, messageCode.NOT_SET_ALREADY_SETTING);
-      }
-  
-      //パスワードのハッシュ化
-      var password = req.body.password;
-      const saltRounds = 10; // ストレッチング回数
-      password = await bcrypt.hash(password, saltRounds);
+    if (emailCheck.length !== 0 ) {
+      return new ApiException(res, messageCode.NOT_SET_ALREADY_SETTING);
+    }
 
-      await insertAccount(req.body, password);
-  
-      res.status(200).json({
-          code : messageCode.SAVE_COMPLETED
-      });
-      } catch (error) {
+    //パスワードのハッシュ化
+    var password = req.body.password;
+    const saltRounds = 10; // ストレッチング回数
+    password = await bcrypt.hash(password, saltRounds);
+
+    await insertAccount(req.body, password);
+
+    res.status(200).json({
+      code : messageCode.SAVE_COMPLETED
+    });
+    } catch (error) {
       throw new ApiException(res,messageCode.SAVE_ERROR);
-      }
+    }
   })().catch(next);
 });
 
@@ -40,30 +41,23 @@ router.post('/create_account', (req, res, next) =>{
  * ログイン
  */
 router.post('/login', function(req, res, next) {
-  try {
-    const email = req.body.email;
-    const password = req.body.password;
-    console.log(req.body);
+  ;(async () => {
+    try {
+      // メールアドレスでアカウント情報取得
+      const result = await loginAccount(req.body);
 
-    connection.connect();
-    connection.query(
-      'SELECT * FROM tb_user '
-      + 'WHERE email = \'' + email + '\''
-      + 'AND password = \'' + password + '\'',
-      (error, results) => {
-        if (error) {
-          throw error;
-        };
-        console.log(results);
-        res.json(results[0])
-        // res.render('top', results[0]);
+      // ハッシュ化されたパスワードの確認
+      const comparePassword =
+        await bcrypt.compare(req.body.password, result[0].password);
+      if (!comparePassword) {
+        return new ApiException(res, messageCode.LOGIN_ERROR)
       }
-    );
-    connection.end();
-  } catch (err) {
-    console.log(err);
-    return;
-  }
+
+      res.status(200).json(result[0]);
+    } catch (err) {
+      return new ApiException(res, messageCode.LOGIN_ERROR);
+    }
+  })().catch(next);
 });
 
 /**
@@ -96,9 +90,27 @@ async function insertAccount(body, password) {
       + 'values(?, ?, ?, ?, ?)';
 
     connection.query(insertSql, insertData,(err, result) => {
-    return err ? reject(err) : resolve(result);
+      return err ? reject(err) : resolve(result);
     });
-});
+  });
+}
+
+/**
+ * メールアドレスでアカウント情報取得
+ */
+async function loginAccount(body) {
+
+  var bindData = [body.email, IS_DELETED_FAULSE];
+
+  return new Promise((resolve, reject) => {
+    var sql = 'SELECT * '
+      + 'FROM tb_user '
+      + 'WHERE email = ? AND is_deleted = ?';
+
+    connection.query(sql, bindData, (err, result) => {
+      return err ? reject(err) : resolve(result);
+    });
+  });
 }
 
 module.exports = router;
