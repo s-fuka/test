@@ -8,13 +8,11 @@ var connection = require('../connection');
 /**
  * 投稿一覧取得
  */
-router.post('/get', (req, res, next) =>{
+router.get('/', (req, res, next) =>{
   ;(async () => {
     try {
-        var posts = await getPosts();
-        res.status(200).json({
-          posts : posts
-      });
+      var posts = await getPosts();
+      res.render('post', {posts:posts});
     } catch (error) {
         throw new ApiException(res,messageCode.SAVE_ERROR);
     }
@@ -24,15 +22,13 @@ router.post('/get', (req, res, next) =>{
 /**
  * 投稿一覧取得
  */
-router.post('/create', (req, res, next) =>{
+router.post('/', (req, res, next) =>{
   ;(async () => {
     try {
       //後からsessionが持っているuserIdに変更する
       var userId = 10;
       await insertPostData(req.body, userId)
-      res.status(200).json({
-          code : messageCode.POST_COMPLETED
-      });
+      res.redirect('post');
     } catch (error) {
         throw new ApiException(res,messageCode.SAVE_ERROR);
     }
