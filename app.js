@@ -11,11 +11,24 @@ var postRouter = require('./routes/post');
 
 var app = express();
 
+app.use(express.urlencoded({ extended: true }));
+
+app.get('/', function(req, res) {
+  res.render('register');
+});
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 app.set('view engine', 'ejs');
-// app.listen(3000, () => {});
+
+app.get('/newForm', (req, res) => {
+	res.render('newForm.ejs');
+});
+
+// app.get('/successPage', (req, res) => {
+// 	res.render('newForm.ejs');
+// });
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -32,6 +45,7 @@ app.use('/post', postRouter);
 app.use(function(req, res, next) {
   next(createError(404));
 });
+
 
 // error handler
 app.use(function(err, req, res, next) {

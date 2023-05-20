@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>登録完了</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+	<div class="container">
+	  <div class="card">
+		<div class="success-icon">
+		  <i class="fa fa-check-circle"></i>
+		</div>
+		<h1 class="text-center">アカウント作成が完了しました</h1>
+		<p class="text-center">ログインしてサービスを利用しましょう！</p>
+		<div class="button-container">
+		  <a href="#" class="back-btn">ログイン画面に戻る</a>
+		</div>
+	  </div>
+	</div>
+  </body>
+</html>
+
+<script>
+	const backBtn = document.querySelector('.back-btn');
+	backBtn.addEventListener('click', () => {
+	  window.location.href = 'http://localhost:3000/newForm';
+	});
+</script>
