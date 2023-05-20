@@ -1,0 +1,40 @@
+body {
+    background-color: #f5f5f5;
+  }
+  
+  .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  .card {
+    background-color: #ffffff;
+    padding: 50px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    text-align: center;
+  }
+  
+  .success-icon {
+    color: #8bc34a;
+    font-size: 70px;
+    margin-bottom: 50px;
+  }
+  
+  .back-btn {
+    background-color: #2196f3;
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 20px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease-in-out;
+  }
+  
+  .back-btn:hover {
+    background-color: #0d47a1;
+    cursor: pointer;
+  }
+  

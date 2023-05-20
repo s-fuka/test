@@ -18,7 +18,8 @@ router.post('/create_account', (req, res, next) =>{
     var emailCheck = await getInsertEmailCheck(req.body);
 
     if (emailCheck.length !== 0 ) {
-      return new ApiException(res, messageCode.NOT_SET_ALREADY_SETTING);
+      // return new ApiException(res, messageCode.NOT_SET_ALREADY_SETTING);
+      res.render('failPage.ejs'); 
     }
 
     //パスワードのハッシュ化
@@ -28,11 +29,17 @@ router.post('/create_account', (req, res, next) =>{
 
     await insertAccount(req.body, password);
 
-    res.status(200).json({
-      code : messageCode.SAVE_COMPLETED
-    });
+
+    // 登録が成功した場合
+    res.render('successPage.ejs');
+
+    // res.status(200).json({
+    //   code : messageCode.SAVE_COMPLETED
+    // });
     } catch (error) {
-      throw new ApiException(res,messageCode.SAVE_ERROR);
+       // 登録が失敗した場合
+      res.render('failPage.ejs'); 
+      // throw new ApiException(res,messageCode.SAVE_ERROR);
     }
   })().catch(next);
 });
