@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title></title>
+  </head>
+  <body>
+    <h1>新規投稿</h1>
+    <form action="/post" method="POST">
+        title <input type="text" name="title"><br>
+        message <input type="text" name="message"><br>
+        <button type="submit">送信</button>
+    </form>
+
+    <br>
+    <h1>投稿一覧</h1>
+    <table border="1" class="table table-striped" width="100%">
+        <thead>
+          <tr>
+            <th width="5%">＊</th>
+            <th width="20%">ユーザー名</th>
+            <th width="20%">タイトル</th>
+            <th width="40%">本文</th>
+            <th width="15%">投稿日</th>
+          </tr>
+        </thead>
+        <tbody>
+            <% for(let i = 0; i < posts.length; i++){ %>
+            <tr>
+                <td><%= posts[i].id %></th>
+                <td><%= posts[i].user_name %></td>
+                <td><%= posts[i].title %></td>
+                <td><%= posts[i].message %></td>
+                <td><%= posts[i].post_date %></td>
+            </tr>
+            <% } %>
+        </tbody>
+      </table>
+  </body>
+</html>
