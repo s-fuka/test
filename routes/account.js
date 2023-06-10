@@ -50,6 +50,7 @@ router.post('/create_account', (req, res, next) =>{
 router.post('/login', function(req, res, next) {
   ;(async () => {
     try {
+      console.log(req.body);
       // メールアドレスでアカウント情報取得
       const result = await loginAccount(req.body);
 
@@ -59,8 +60,9 @@ router.post('/login', function(req, res, next) {
       if (!comparePassword) {
         return new ApiException(res, messageCode.LOGIN_ERROR)
       }
-
-      res.status(200).json(result[0]);
+      console.log(comparePassword);
+      
+      res.render('post.ejs');
     } catch (err) {
       return new ApiException(res, messageCode.LOGIN_ERROR);
     }

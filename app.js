@@ -30,6 +30,10 @@ app.get('/newForm', (req, res) => {
 // 	res.render('newForm.ejs');
 // });
 
+app.get('/login', (req, res) => {
+  res.render('login.ejs');
+});
+
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
