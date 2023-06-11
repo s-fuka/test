@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcrypt');
+const request = require('request');
 var messageCode = require('./common/messageCode');
 const ApiException = require('./common/Exception');
 const define = require('./common/define');
@@ -50,7 +51,6 @@ router.post('/create_account', (req, res, next) =>{
 router.post('/login', function(req, res, next) {
   ;(async () => {
     try {
-      console.log(req.body);
       // メールアドレスでアカウント情報取得
       const result = await loginAccount(req.body);
 
@@ -60,9 +60,8 @@ router.post('/login', function(req, res, next) {
       if (!comparePassword) {
         return new ApiException(res, messageCode.LOGIN_ERROR)
       }
-      console.log(comparePassword);
-      
-      res.render('post.ejs');
+
+      await login(res);
     } catch (err) {
       return new ApiException(res, messageCode.LOGIN_ERROR);
     }
@@ -119,6 +118,21 @@ async function loginAccount(body) {
     connection.query(sql, bindData, (err, result) => {
       return err ? reject(err) : resolve(result);
     });
+  });
+}
+
+/**
+ * 投稿一覧取得メソッドを呼んで投稿一覧画面に遷移させる
+ */
+async function login(res) {
+  const url = 'http://localhost:3000/post';
+
+  request.get({
+    uri: url,
+    headers: {'Content-type': 'application/json'},
+    json: true
+  }, function(err, req, data){
+    res.redirect('/post');
   });
 }
 
