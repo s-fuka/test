@@ -12,6 +12,7 @@ router.get('/', (req, res, next) =>{
   ;(async () => {
     try {
       var posts = await getPosts();
+      console.log(posts)
       res.render('post', {posts:posts});
     } catch (error) {
         throw new ApiException(res,messageCode.SAVE_ERROR);
@@ -40,9 +41,10 @@ router.post('/', (req, res, next) =>{
  */
 async function getPosts() {
   return new Promise((resolve, reject) => {
-  var sql = 'SELECT T1.id, T1.title, T1.message, T1.post_date, T2.user_name '
+  var sql = 'SELECT T1.title, T1.message, '
+      + 'DATE_FORMAT(T1.post_date,\'%Y/%m/%d\') AS post_date, T2.user_name '
       + 'FROM tb_board AS T1 INNER JOIN tb_user AS T2 '
-      + 'ON T1.user_id = T2.user_id WHERE T1.is_deleted = ?;';
+      + 'ON T1.user_id = T2.user_id WHERE T1.is_deleted = ? ORDER BY post_date DESC;';
   var bindData = [define.IS_DELETED_OFF];
     connection.query(sql, bindData,(err, result) => {
       return err ? reject(err) : resolve(result);
